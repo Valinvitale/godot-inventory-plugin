@@ -1,17 +1,11 @@
-# Godot 4+ specific ignores
-.godot/
-.nomedia
+# This file is part of the Godot Inventory Plugin project.
+#
+# It is intended for Godot 4.6.3 and uses a minimal default gitignore for Godot projects.
 
-# Godot-specific ignores
 .import/
-export.cfg
-export_credentials.cfg
-*.tmp
-
-# Imported translations (automatically generated from CSV files)
+.export/
+.godot/
+*.import
 *.translation
-
-# Mono-specific ignores
-.mono/
-data_*/
-mono_crash.*.json
+*.tmp
+*.log
