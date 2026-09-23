@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="InventoryPreset" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/inventory_plugin/core/InventoryPreset.gd" id="1_preset"]
+
+[resource]
+script = ExtResource("1_preset")
+preset_name = "Player Inventory"
+slot_size = Vector2(64, 64)
+cell_spacing = Vector2(8, 8)
+panel_padding = Vector4(12, 12, 12, 12)
+show_scrollbars = true
+tooltip_enabled = true
