@@ -1,24 +1,34 @@
-# Inventory Plugin API
+# Editor workflow
 
-## Runtime
+The plugin is split into two independent components:
 
-`InventoryData` is a `Resource` and contains only inventory state. `ItemData` and `ItemStack` are also resources, so they can be authored in the inspector or saved as `.tres` files.
+- `InventoryData`: a small `Resource` containing rows, columns, and `ItemStack` values. It has no UI references.
+- `InventoryView`: a `Control` that displays an `InventoryData` resource and sends movement operations through `InventoryController`.
 
-`InventoryView` is the presentation layer. Assign any `InventoryData` and `InventoryPreset` to it, and it creates a scrollable grid automatically. Multiple views can point at different inventories or share one inventory with different presets.
+## Editor preview
 
-`InventoryController` contains the default movement policy: empty-slot moves, stack merging, and swaps. Replace it or wrap it when a game needs restrictions such as equipment slot types, locked slots, or permissions.
+`InventoryView` is an `@tool` control. Add it to a scene and assign an `InventoryPreset` resource. With no inventory assigned, the view renders an editor preview using `editor_rows` and `editor_columns` (or the preset's preview dimensions). Change slot size, spacing, textures, colors, icon scale, and scrollbar settings in the Inspector and the 2D preview updates without running the scene.
 
-## Drag/drop
+The `InventoryView` node itself is a normal `Control`, so its position, size, anchors, and scale can be changed and dragged in the 2D editor. The preset controls the repeated slot appearance; the view controls where and how large the inventory is in the scene.
 
-The built-in slot controls use Godot's `Control` drag/drop API. Dragging a populated slot to another slot calls the controller and performs a merge or swap.
+## Saving presets
 
-## Presets
+Create an `InventoryPreset` resource from the Inspector, edit it, then save it as a `.tres` file. For example:
 
-`InventoryPreset` is a `Resource`. Save it from the Godot editor as a `.tres` file, then reuse it for player, chest, barrel, or other views. It controls slot sizing, spacing, colors, borders, icon padding, scrollbars, and tooltip behavior.
+- `player_inventory_preset.tres`
+- `chest_inventory_preset.tres`
+- `barrel_inventory_preset.tres`
 
-## Extension points
+Each view can reference a different preset while using the same inventory data component. Godot automatically serializes exported textures, colors, dimensions, and other preset properties into the resource file.
 
-- Connect `InventoryView.slot_selected` for selection systems.
-- Connect `InventoryView.item_moved` for sound, quests, analytics, or multiplayer replication.
-- Subclass `InventoryController` for custom movement validation.
-- Add tooltip, filter, context-menu, or hotbar controls around `InventoryView` without coupling them to `InventoryData`.
+## Runtime usage
+
+```gdscript
+var data := InventoryData.new(4, 8)
+var view := InventoryView.new()
+view.inventory_data = data
+view.preset = load("res://inventory/player_inventory_preset.tres")
+add_child(view)
+```
+
+The editor preview does not create or save items. Assign an `InventoryData` resource when you want to preview actual item contents. Otherwise it remains a visual layout preview.

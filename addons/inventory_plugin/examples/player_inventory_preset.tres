@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1_preset")
 preset_name = "Player Inventory"
+preview_rows = 4
+preview_columns = 8
 slot_size = Vector2(64, 64)
 cell_spacing = Vector2(8, 8)
 panel_padding = Vector4(12, 12, 12, 12)
